@@ -19,6 +19,7 @@
 - [Tailwind CSS](https://tailwindcss.com)
 - [Supabase](https://supabase.com) (Auth + Postgres + Row Level Security)
 - [@hello-pangea/dnd](https://github.com/hello-pangea/dnd) (sürükle-bırak)
+- [lucide-react](https://lucide.dev) (ikonlar)
 
 ## Geliştirme ortamını çalıştırma
 
