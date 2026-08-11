@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd";
 import { updateApplicationStatus } from "./actions";
+import { STATUSES } from "./statuses";
 
 type Application = {
     id: string;
@@ -11,13 +12,6 @@ type Application = {
     job_link: string | null;
     status: string;
 };
-
-const STATUSES = [
-    { key: "basvuruldu", label: "Başvuruldu", dot: "bg-slate-400", accent: "border-l-slate-400" },
-    { key: "mulakat", label: "Mülakat", dot: "bg-indigo-500", accent: "border-l-indigo-500" },
-    { key: "teklif", label: "Teklif", dot: "bg-emerald-500", accent: "border-l-emerald-500" },
-    { key: "red", label: "Red", dot: "bg-red-400", accent: "border-l-red-400" },
-];
 
 export default function KanbanBoard({ applications }: { applications: Application[] }) {
     const [items, setItems] = useState(applications);
@@ -42,6 +36,7 @@ export default function KanbanBoard({ applications }: { applications: Applicatio
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {STATUSES.map((column) => {
                     const columnApps = items.filter((app) => app.status === column.key);
+                    const Icon = column.icon;
 
                     return (
                         <Droppable droppableId={column.key} key={column.key}>
@@ -49,17 +44,24 @@ export default function KanbanBoard({ applications }: { applications: Applicatio
                                 <div
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
-                                    className={`min-h-[120px] space-y-3 rounded-xl p-2 transition-colors ${snapshot.isDraggingOver ? "bg-slate-100" : ""
+                                    className={`flex min-h-[320px] flex-col gap-3 rounded-xl border border-slate-200 p-3 transition-colors ${snapshot.isDraggingOver ? "bg-slate-100" : "bg-slate-50/70"
                                         }`}
                                 >
                                     <div className="flex items-center gap-2 px-1">
                                         <span className={`h-2 w-2 rounded-full ${column.dot}`} />
                                         <h2 className="text-sm font-semibold text-slate-900">{column.label}</h2>
-                                        <span className="text-xs text-slate-400">({columnApps.length})</span>
+                                        <span className="ml-auto rounded-full bg-white px-2 py-0.5 text-xs font-medium text-slate-500">
+                                            {columnApps.length}
+                                        </span>
                                     </div>
 
                                     {columnApps.length === 0 && (
-                                        <p className="px-1 text-xs text-slate-400">Başvuru yok</p>
+                                        <div className="flex flex-1 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 px-3 py-8">
+                                            <div className={`flex h-9 w-9 items-center justify-center rounded-full ${column.iconBg}`}>
+                                                <Icon className={`h-4 w-4 ${column.iconColor}`} />
+                                            </div>
+                                            <p className="text-center text-xs text-slate-400">Başvuru yok</p>
+                                        </div>
                                     )}
 
                                     {columnApps.map((app, index) => (
