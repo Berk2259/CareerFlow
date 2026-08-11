@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "../login/actions";
 import { addApplication } from "./actions";
+import KanbanBoard from "./kanban-board";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -18,7 +19,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="mx-auto max-w-2xl space-y-8">
+      <div className="mx-auto max-w-6xl space-y-8">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
           <form action={signOut}>
@@ -52,35 +53,7 @@ export default async function DashboardPage() {
           </form>
         </div>
 
-        <div className="space-y-3">
-          <h2 className="text-sm font-medium text-gray-900">Başvurularım</h2>
-          {applications && applications.length > 0 ? (
-            applications.map((app) => (
-              <div
-                key={app.id}
-                className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4"
-              >
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {app.position} — {app.company}
-                  </p>
-                  <p className="text-xs text-gray-500">{app.status}</p>
-                </div>
-                {app.job_link && (
-                  <a
-                    href={app.job_link}
-                    target="_blank"
-                    className="text-xs text-blue-600 hover:underline"
-                  >
-                    İlana git
-                  </a>
-                )}
-              </div>
-            ))
-          ) : (
-            <p className="text-sm text-gray-400">Henüz başvuru eklemedin.</p>
-          )}
-        </div>
+        <KanbanBoard applications={applications ?? []} />
       </div>
     </div>
   );

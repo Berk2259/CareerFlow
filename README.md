@@ -7,7 +7,7 @@
 - [x] E-posta ile kayıt/giriş (Supabase Auth)
 - [x] Korumalı dashboard (giriş yapmayan kullanıcı erişemiyor)
 - [x] Başvuru ekleme ve listeleme
-- [ ] Kanban görünümü (durumlara göre sürükle-bırak)
+- [x] Kanban görünümü (durumlara göre sürükle-bırak)
 - [ ] Takvim (mülakat/son başvuru tarihleri)
 - [ ] CV arşivi
 - [ ] AI destekli CV-ilan eşleştirme
@@ -18,6 +18,7 @@
 - [Next.js](https://nextjs.org) (App Router) + TypeScript
 - [Tailwind CSS](https://tailwindcss.com)
 - [Supabase](https://supabase.com) (Auth + Postgres + Row Level Security)
+- [@hello-pangea/dnd](https://github.com/hello-pangea/dnd) (sürükle-bırak)
 
 ## Geliştirme ortamını çalıştırma
 

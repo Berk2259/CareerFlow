@@ -32,3 +32,25 @@ export async function addApplication(formData: FormData) {
 
   revalidatePath("/dashboard");
 }
+
+export async function updateApplicationStatus(id: string, newStatus: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/login");
+
+  const { error } = await supabase
+    .from("applications")
+    .update({ status: newStatus })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  revalidatePath("/dashboard");
+}
