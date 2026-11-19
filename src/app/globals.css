@@ -24,3 +24,39 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+.app-card-main {
+  transition: opacity 0.2s ease;
+}
+.group:hover .app-card-main {
+  opacity: 0;
+}
+
+.app-card-dock {
+  transition: opacity 0.18s ease;
+}
+.group:hover .app-card-dock {
+  opacity: 0;
+}
+
+.app-card-overlay {
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 0.38s cubic-bezier(0.65, 0, 0.35, 1);
+  pointer-events: none;
+}
+.group:hover .app-card-overlay {
+  clip-path: inset(0 0 0 0);
+  pointer-events: auto;
+}
+.app-card-overlay .ov-row {
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.group:hover .app-card-overlay .ov-row {
+  opacity: 1;
+  transform: translateX(0);
+}
+.app-card-overlay .ov-row:nth-child(1) { transition-delay: 0.08s; }
+.app-card-overlay .ov-row:nth-child(2) { transition-delay: 0.14s; }
+.app-card-overlay .ov-row:nth-child(3) { transition-delay: 0.2s; }
+.app-card-overlay .ov-row:nth-child(4) { transition-delay: 0.26s; }

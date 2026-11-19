@@ -18,7 +18,13 @@ export default async function DashboardPage() {
     .select("*")
     .order("created_at", { ascending: false });
 
+  const { data: timelineEvents } = await supabase
+    .from("application_timeline")
+    .select("*")
+    .order("created_at", { ascending: true });
+
   const apps = applications ?? [];
+  const timeline = timelineEvents ?? [];
   const initial = user.email?.[0]?.toUpperCase() ?? "?";
 
   return (
@@ -80,7 +86,7 @@ export default async function DashboardPage() {
 
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="mb-4 text-sm font-medium text-slate-900">Yeni başvuru ekle</h2>
-          <form action={addApplication} className="flex flex-col gap-3 sm:flex-row">
+          <form action={addApplication} className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <input
               name="company"
               placeholder="Şirket"
@@ -98,13 +104,74 @@ export default async function DashboardPage() {
               placeholder="İlan linki (opsiyonel)"
               className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
             />
+            <select
+              name="employment_type"
+              defaultValue=""
+              className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            >
+              <option value="">Pozisyon tipi (opsiyonel)</option>
+              <option value="staj">Staj</option>
+              <option value="tam_zamanli">Tam Zamanlı</option>
+              <option value="yari_zamanli">Yarı Zamanlı</option>
+              <option value="sozlesmeli">Sözleşmeli</option>
+            </select>
+            <select
+              name="work_mode"
+              defaultValue=""
+              className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            >
+              <option value="">Çalışma şekli (opsiyonel)</option>
+              <option value="remote">Remote</option>
+              <option value="hibrit">Hibrit</option>
+              <option value="ofis">Ofis</option>
+            </select>
+            <input
+              name="city"
+              placeholder="Şehir (opsiyonel)"
+              className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            />
+            <select
+              name="source"
+              defaultValue=""
+              className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            >
+              <option value="">Başvuru yeri (opsiyonel)</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="kariyer_net">Kariyer.net</option>
+              <option value="indeed">Indeed</option>
+              <option value="kendi_sitesi">Kendi sitesi</option>
+            </select>
+            <select
+              name="cv_type"
+              defaultValue=""
+              className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            >
+              <option value="">CV türü (opsiyonel)</option>
+              <option value="turkce">Türkçe</option>
+              <option value="ingilizce">İngilizce</option>
+            </select>
+            <input
+              name="applied_date"
+              type="date"
+              className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            />
+            <input
+              name="company_followers"
+              placeholder="Takipçi sayısı (opsiyonel)"
+              className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            />
+            <input
+              name="company_employees"
+              placeholder="Çalışan sayısı (opsiyonel)"
+              className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            />
             <button className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800">
               Ekle
             </button>
           </form>
         </div>
 
-        <KanbanBoard applications={apps} />
+        <KanbanBoard applications={apps} timeline={timeline} />
       </div>
     </div>
   );
