@@ -42,21 +42,62 @@ body {
   clip-path: inset(0 0 0 100%);
   transition: clip-path 0.38s cubic-bezier(0.65, 0, 0.35, 1);
   pointer-events: none;
+  overflow: hidden;
 }
 .group:hover .app-card-overlay {
   clip-path: inset(0 0 0 0);
   pointer-events: auto;
 }
-.app-card-overlay .ov-row {
+
+.ov-page {
+  position: absolute;
+  inset: 1rem;
+  top: 1.75rem;
   opacity: 0;
-  transform: translateX(8px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateX(14px);
 }
-.group:hover .app-card-overlay .ov-row {
-  opacity: 1;
-  transform: translateX(0);
+.group:hover .ov-page-1 {
+  animation: ov-page-1-anim 5.5s ease forwards;
 }
-.app-card-overlay .ov-row:nth-child(1) { transition-delay: 0.08s; }
-.app-card-overlay .ov-row:nth-child(2) { transition-delay: 0.14s; }
-.app-card-overlay .ov-row:nth-child(3) { transition-delay: 0.2s; }
-.app-card-overlay .ov-row:nth-child(4) { transition-delay: 0.26s; }
+.group:hover .ov-page-2 {
+  animation: ov-page-2-anim 5.5s ease forwards;
+}
+@keyframes ov-page-1-anim {
+  0% { opacity: 0; transform: translateX(14px); }
+  10% { opacity: 1; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(0); }
+  60% { opacity: 0; transform: translateX(-14px); }
+  100% { opacity: 0; transform: translateX(-14px); }
+}
+@keyframes ov-page-2-anim {
+  0% { opacity: 0; transform: translateX(14px); }
+  60% { opacity: 0; transform: translateX(14px); }
+  70% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.ov-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: #e2e8f0;
+  transition: background 0.2s ease;
+}
+.group:hover .ov-dot-1 {
+  animation: ov-dot-1-anim 5.5s ease forwards;
+}
+.group:hover .ov-dot-2 {
+  animation: ov-dot-2-anim 5.5s ease forwards;
+}
+@keyframes ov-dot-1-anim {
+  0% { background: #6366f1; }
+  59% { background: #6366f1; }
+  60% { background: #e2e8f0; }
+  100% { background: #e2e8f0; }
+}
+@keyframes ov-dot-2-anim {
+  0% { background: #e2e8f0; }
+  59% { background: #e2e8f0; }
+  60% { background: #6366f1; }
+  100% { background: #6366f1; }
+}

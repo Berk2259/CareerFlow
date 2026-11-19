@@ -192,6 +192,18 @@ export default function ApplicationDetail({
         ];
     }
 
+    const roundsCount = steps.filter((s) => s.step_key === "mulakat").length;
+    const daysElapsed = Math.max(
+        0,
+        Math.round((new Date(last.created_at).getTime() - new Date(steps[0].created_at).getTime()) / 86400000)
+    );
+    const pathParts = ["başvuru"];
+    if (steps.some((s) => s.step_key === "inceleniyor")) pathParts.push("inceleme");
+    if (steps.some((s) => s.step_key === "on_gorusme")) pathParts.push("ön görüşme");
+    if (roundsCount > 0) pathParts.push(`${roundsCount} mülakat turu`);
+    pathParts.push(app.status === "teklif" ? "teklif" : "red");
+    const resultSummary = `Süreç: ${pathParts.join(" → ")}. Toplam ~${daysElapsed} gün sürdü.`;
+
     function formatTime(iso: string) {
         return new Date(iso).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
     }
@@ -266,18 +278,25 @@ export default function ApplicationDetail({
                     </div>
 
                     <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-5">
-                        <h3 className="mb-4 text-[13px] font-bold text-slate-900">Durum güncelle</h3>
+                        <div className="mb-4">
+                            <div className="text-[10px] font-extrabold uppercase tracking-wide text-slate-300">
+                                Başvuru Süreci
+                            </div>
+                            <div className="text-[16px] font-extrabold tracking-tight text-slate-900">
+                                {app.position} — {app.company}
+                            </div>
+                        </div>
 
                         <div className="flex flex-col">
                             {steps.map((s, i) => {
                                 const isLast = i === steps.length - 1;
+                                const isResultStep = isLast && isFinal;
                                 const done = !isLast || isFinal;
-                                const isRejectFinal = s.step_key === "red" && isLast && isFinal;
-                                const nodeIcon =
-                                    s.step_key === "teklif" ? "🏆" :
-                                        s.step_key === "red" ? "✕" :
-                                            s.step_key === "beklemede" ? "⏳" :
-                                                done ? "✓" : String(i + 1);
+                                const isRejectFinal = isResultStep && app.status === "red";
+                                const nodeIcon = isResultStep
+                                    ? app.status === "red" ? "✕" : "✓"
+                                    : s.step_key === "beklemede" ? "⏳"
+                                        : done ? "✓" : String(i + 1);
 
                                 return (
                                     <div key={s.id ?? `${s.step_key}-${i}`} className="flex gap-3.5">
@@ -296,24 +315,47 @@ export default function ApplicationDetail({
                                                 <div className={`my-0.5 w-0.5 flex-1 min-h-[22px] ${done ? "bg-emerald-400" : "bg-slate-200"}`} />
                                             )}
                                         </div>
-                                        <div className={`flex-1 ${isLast ? "pb-1" : "pb-5"}`}>
-                                            <div className="flex items-baseline justify-between gap-2">
-                                                <span
-                                                    className={`text-[13px] font-bold ${isRejectFinal ? "text-red-600" : done ? "text-emerald-700" : "text-slate-900"
-                                                        }`}
-                                                >
-                                                    {s.title}
-                                                </span>
-                                                <span className="flex-shrink-0 text-[10px] font-semibold text-slate-300">
-                                                    {formatTime(s.created_at)}
-                                                </span>
-                                            </div>
-                                            {s.meta && <p className="mt-0.5 text-[11px] text-slate-400">{s.meta}</p>}
-                                            {s.tag && (
-                                                <span className="mt-1.5 inline-block rounded-md bg-slate-100 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-slate-500">
-                                                    {s.tag}
-                                                </span>
+                                        <div className={`relative flex-1 ${isLast ? "pb-1" : "pb-5"}`}>
+                                            {!isResultStep && (
+                                                <div className="pointer-events-none absolute right-0 top-[-8px] select-none text-[38px] font-extrabold leading-none text-slate-100">
+                                                    {String(i + 1).padStart(2, "0")}
+                                                </div>
                                             )}
+                                            <div className="relative z-10">
+                                                {isResultStep ? (
+                                                    <>
+                                                        <div className="text-[10px] font-extrabold uppercase tracking-wide text-slate-300">
+                                                            Sonuç
+                                                        </div>
+                                                        <div
+                                                            className={`text-[17px] font-extrabold ${app.status === "red" ? "text-red-600" : "text-emerald-700"
+                                                                }`}
+                                                        >
+                                                            {s.title}
+                                                        </div>
+                                                        <div className="mt-3 border-t border-slate-100 pt-3 text-[11.5px] leading-relaxed text-slate-500">
+                                                            {resultSummary}
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <div className="flex items-baseline justify-between gap-2">
+                                                            <span className={`text-[13px] font-bold ${done ? "text-emerald-700" : "text-slate-900"}`}>
+                                                                {s.title}
+                                                            </span>
+                                                            <span className="flex-shrink-0 text-[10px] font-semibold text-slate-300">
+                                                                {formatTime(s.created_at)}
+                                                            </span>
+                                                        </div>
+                                                        {s.meta && <p className="mt-0.5 text-[11px] text-slate-400">{s.meta}</p>}
+                                                        {s.tag && (
+                                                            <span className="mt-1.5 inline-block rounded-md bg-slate-100 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-slate-500">
+                                                                {s.tag}
+                                                            </span>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 );
