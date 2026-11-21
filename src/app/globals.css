@@ -101,3 +101,37 @@ body {
   60% { background: #6366f1; }
   100% { background: #6366f1; }
 }
+
+.sidebar-glow {
+  animation: sidebar-glow-float 8s ease-in-out infinite;
+}
+@keyframes sidebar-glow-float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, 30px); }
+}
+.sidebar-glow {
+  animation: sidebar-glow-float 8s ease-in-out infinite;
+}
+@keyframes sidebar-glow-float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, 30px); }
+}
+.donut-pulse-ring {
+  animation: donut-pulse-ring-anim 0.8s ease-out;
+}
+@keyframes donut-pulse-ring-anim {
+  0% { opacity: 0.9; stroke-width: 1.5; }
+  100% { opacity: 0; stroke-width: 16; }
+}
+
+.icon-wiggle {
+  animation: icon-wiggle-anim 0.5s ease;
+}
+@keyframes icon-wiggle-anim {
+  0% { transform: scale(1) rotate(0deg); }
+  20% { transform: scale(1.25) rotate(-14deg); }
+  40% { transform: scale(1.1) rotate(10deg); }
+  60% { transform: scale(1.18) rotate(-6deg); }
+  80% { transform: scale(1.05) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
